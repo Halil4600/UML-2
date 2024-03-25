@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UML2;
 
 namespace UML_2
@@ -21,7 +23,7 @@ namespace UML_2
         {
             Pizza pizza = new Pizza();
             Console.Clear();
-            Console.WriteLine("Creating a pizza");
+            Console.WriteLine("Creating a new pizza");
             Console.Write("Enter name of the pizza ");
             pizza.Name = Console.ReadLine();
 
@@ -67,27 +69,54 @@ namespace UML_2
             }
         }
 
-        public void UpdatePizza(int PizzaId, string Name, double Price, MenuCatalog menuCatalog)
+        public void UpdatePizza()
         {
-            Console.WriteLine("Enter the Id of the pizza you want to update");
-            int newPizzaId = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter the new name for the chosen pizza");
-            string newName = Console.ReadLine();
-
-            Console.WriteLine("Enter the new price for the chosen pizza");
-            double newPrice = double.Parse(Console.ReadLine());
-
-            bool result = menuCatalog.UpdatePizza(newPizzaId, newName, newPrice);
-            if (result)
+            Console.WriteLine("Enter the Id of the pizza you want to update:");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int pizzaId))
             {
-                Console.WriteLine("Your pizza has been updated");
+                Console.WriteLine("Enter the new name for the chosen pizza:");
+                string Name = Console.ReadLine();
+
+                Console.WriteLine("Enter the new price for the chosen pizza:");
+                if (double.TryParse(Console.ReadLine(), out double Price))
+                {
+                    _menuCatalog.UpdatePizza(pizzaId, Name, Price);
+                    Console.WriteLine("Pizza updated successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input for price. Please enter a valid number.");
+                }
             }
             else
-            { 
-                Console.WriteLine("The pizza was not found");
+            {
+                Console.WriteLine("Invalid input for ID. Please enter a valid number.");
             }
         }
+
+        public void SearchPizza()
+        {
+            Console.WriteLine("Enter the ID of the pizza you want to search for:");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int PizzaId))
+            {
+                Pizza pizza = _menuCatalog.SearchPizza(PizzaId);
+                if (pizza != null)
+                {
+                    Console.WriteLine($"Pizza Found: ID = {pizza.PizzaId}, Name = {pizza.Name}, Price = {pizza.Price}");
+                }
+                else
+                {
+                    Console.WriteLine("Pizza not found.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid pizza ID.");
+            }
+        }
+
 
         int MainMenuChoice(List<string> menuItems)
         {
@@ -165,12 +194,13 @@ namespace UML_2
                         break;
 
                     case 3:
-                        Console.Write("Type the ID of the pizza you want to update");
-                        if (!int.TryParse(Console.ReadLine(), out int pizzaId));
-                        { 
-                            Console.WriteLine("Invalid input");
-                        }
+                        UpdatePizza();
+                        break;
 
+                    case 4:
+                        SearchPizza();
+                        int choice = int.Parse(Console.ReadLine());
+                        break;
 
                     case 5:
                             _menuCatalog.PrintMenu();

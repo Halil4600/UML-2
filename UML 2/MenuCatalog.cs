@@ -26,22 +26,27 @@ namespace UML_2
             _pizzas.RemoveAll(Pizza => Pizza.PizzaId == PizzaId);
         }
 
-        public bool UpdatePizza(int PizzaId, string Name, double Price)
+        public void UpdatePizza(int PizzaId, string Name, double Price)
         {
-            var pizza = _pizzas.FirstOrDefault(p => p.PizzaId == PizzaId);
-            if (pizza != null)
-            {
-                pizza.PizzaId = PizzaId;
-                pizza.Name = Name;
-                pizza.Price = Price;
-                return true; 
-            }
-            return false; 
+            foreach (Pizza pizza in _pizzas)
+                if (pizza.PizzaId == PizzaId)
+                {
+                    pizza.Name = Name;
+                    pizza.Price = Price;
+                    return;
+                }
         }
 
-        public void SearchPizza()
-        { 
-            
+        public Pizza SearchPizza(int PizzaId)
+        {
+            foreach (Pizza pizza in _pizzas)
+            {
+                if (pizza.PizzaId == PizzaId)
+                {
+                    return pizza;
+                }
+            }
+            return null;
         }
        
         public void PrintMenu()

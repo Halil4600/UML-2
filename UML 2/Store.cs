@@ -13,7 +13,7 @@ namespace UML_2
 
         public Store()
         {
-            menuCatalog = new MenuCatalog();
+           menuCatalog = new MenuCatalog();
         }
 
         public void Test()
