@@ -21,20 +21,38 @@ namespace UML_2
             _pizzas.Add(p);
         }
 
-        public void DeletePizza(int PizzaId)
+        public void DeletePizza(Pizza pizza)
         {
-            _pizzas.RemoveAll(Pizza => Pizza.PizzaId == PizzaId);
+            if (pizza.PizzaId <= 0)
+            {
+                throw new FormatException("No number");
+            }
+            foreach (var i in _pizzas)
+            {
+                if (i.PizzaId == pizza.PizzaId)
+                {
+                    pizza = i;
+                }
+            }
+            if ((pizza.Name == null) || (pizza.Name.Trim().Length <= 0)) { throw new FormatException("Pizza doesnt exist"); }
+
+            _pizzas.Remove(pizza);
         }
 
-        public void UpdatePizza(int PizzaId, string Name, double Price)
+        public void UpdatePizza(Pizza pizza)
         {
-            foreach (Pizza pizza in _pizzas)
-                if (pizza.PizzaId == PizzaId)
+            bool PizzaFound = false;
+            foreach (Pizza i in _pizzas)
+            {
+                if (i.PizzaId == pizza.PizzaId)
                 {
-                    pizza.Name = Name;
-                    pizza.Price = Price;
-                    return;
+                    i.Name = pizza.Name;
+                    i.Price = pizza.Price;
+                    PizzaFound = true;
                 }
+            }
+            if (PizzaFound == false) { throw new FormatException("Pizza doesnt exist"); }
+
         }
 
         public Pizza SearchPizza(int PizzaId)
@@ -56,8 +74,6 @@ namespace UML_2
                 Console.WriteLine(p);
             }
         }
-
-
 
     }
 }

@@ -54,69 +54,83 @@ namespace UML_2
             }
             return pizza;
         }
-
-        public void DeletePizza(int id)
+        Pizza DeletePizza()
         {
-            Console.WriteLine("Enter the ID of the pizza you want to delete:");
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int pizzaId))
+            Pizza pizza = new Pizza();
+            Console.Clear();
+            Console.WriteLine("Enter the id of the pizza you want to delete");
+            string input = "";
+
+            try
             {
-                DeletePizza(pizzaId);
+                input = Console.ReadLine();
+                pizza.PizzaId = Int32.Parse(input);
             }
-            else
+            catch (FormatException e) 
             {
-                Console.WriteLine("Invalid input. Please enter a valid pizza ID.");
+                Console.WriteLine("Pizza doesnt exist");
             }
+            return pizza;
         }
 
-        public void UpdatePizza()
+        Pizza UpdatePizza()
         {
-            Console.WriteLine("Enter the Id of the pizza you want to update:");
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int pizzaId))
-            {
-                Console.WriteLine("Enter the new name for the chosen pizza:");
-                string Name = Console.ReadLine();
+            Pizza pizza = new Pizza();
+            Console.Clear();
+            _menuCatalog.PrintMenu();
+            Console.WriteLine();
+            Console.WriteLine("Enter the Id of the pizza you want to update");
+            pizza.PizzaId = Int32.Parse(Console.ReadLine());
+            Pizza p = _menuCatalog.SearchPizza(pizza.PizzaId);
 
-                Console.WriteLine("Enter the new price for the chosen pizza:");
-                if (double.TryParse(Console.ReadLine(), out double Price))
-                {
-                    _menuCatalog.UpdatePizza(pizzaId, Name, Price);
-                    Console.WriteLine("Pizza updated successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input for price. Please enter a valid number.");
-                }
-            }
-            else
+            if (p != null)
             {
-                Console.WriteLine("Invalid input for ID. Please enter a valid number.");
+                string input = "";
+                Console.Write("Enter new name for the pizza: ");
+                try
+                {
+                    input = Console.ReadLine();
+                    pizza.Name = input;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid name:");
+                }
+
+                input = "";
+                Console.Write("Enter new price for the pizza: ");
+                try
+                {
+                    input = Console.ReadLine();
+                    pizza.Price = Int32.Parse(input);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid price");
+                }
             }
+            return pizza;
+
         }
 
-        public void SearchPizza()
+        Pizza SearchPizza()
         {
+            Pizza pizza = new Pizza();
+            Console.Clear();
             Console.WriteLine("Enter the ID of the pizza you want to search for:");
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int PizzaId))
-            {
-                Pizza pizza = _menuCatalog.SearchPizza(PizzaId);
-                if (pizza != null)
-                {
-                    Console.WriteLine($"Pizza Found: ID = {pizza.PizzaId}, Name = {pizza.Name}, Price = {pizza.Price}");
-                }
-                else
-                {
-                    Console.WriteLine("Pizza not found.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid input. Please enter a valid pizza ID.");
-            }
-        }
 
+            string input = "";
+            try
+            {
+                input = Console.ReadLine();
+                pizza.PizzaId = Int32.Parse(input);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Pizza doesnt exist");
+            }
+            return pizza;
+        }
 
         int MainMenuChoice(List<string> menuItems)
         {
@@ -175,33 +189,48 @@ namespace UML_2
                         break;
 
                     case 2:
-
-                        Console.Write("Type the ID of the pizza you want to delete: ");
-                        string input = Console.ReadLine();
-
-                        
-                        if (int.TryParse(input, out int pizzaId))
+                        try
                         {
-                            
-                            _menuCatalog.DeletePizza(pizzaId);
-                            Console.WriteLine("Pizza deleted successfully.");
+                            Pizza pizza = DeletePizza();
+                            _menuCatalog.DeletePizza(pizza);
                         }
-                        else
+                        catch (Exception)
                         {
-                            
-                            Console.WriteLine("Invalid input. Please enter a valid pizza ID.");
+                            Console.WriteLine("Pizza doesnt exist");
                         }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
                         break;
 
                     case 3:
-                        UpdatePizza();
+                        try
+                        {
+                            Pizza pizza = UpdatePizza();
+                            _menuCatalog.UpdatePizza(pizza);
+                            Console.WriteLine($"The pizza has been updated: {pizza}");
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("No pizza was updated");
+                        }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
                         break;
 
                     case 4:
-                        SearchPizza();
-                        int choice = int.Parse(Console.ReadLine());
+                        try
+                        {
+                            Pizza pizza = SearchPizza();
+                            pizza = _menuCatalog.SearchPizza(pizza.PizzaId);
+                            Console.WriteLine($"The following pizza is found: {pizza}");
+                        }
+                        catch (Exception)
+                        { 
+                            Console.WriteLine("Pizza was not found");
+                        }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
                         break;
-
                     case 5:
                             _menuCatalog.PrintMenu();
                             Console.Write("Hit any key to continue");
