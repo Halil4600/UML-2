@@ -182,7 +182,7 @@ namespace UML_2
                         }
                         catch (Exception) 
                         {
-                            Console.WriteLine($"No pizza was created");
+                            Console.WriteLine($"Pizza with this id exists. No pizza was created");
                         }
                         Console.Write("Hit any key to continue");
                         Console.ReadKey();

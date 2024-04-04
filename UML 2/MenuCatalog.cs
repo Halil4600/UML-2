@@ -18,6 +18,12 @@ namespace UML_2
 
         public void Create(Pizza p)
         {
+            
+            foreach (Pizza pizza in _pizzas)
+            {
+                if (pizza.PizzaId == p.PizzaId)
+                { throw new FormatException("Pizza with this id exists. No pizza was created"); }
+            }
             _pizzas.Add(p);
         }
 
