@@ -63,13 +63,16 @@ namespace UML_2
 
         public Pizza SearchPizza(int PizzaId)
         {
+            bool foundpizza = false;
             foreach (Pizza pizza in _pizzas)
             {
                 if (pizza.PizzaId == PizzaId)
                 {
                     return pizza;
+                    foundpizza= true;
                 }
             }
+            if (foundpizza == false) { throw new FormatException("Pizza doesnt exist"); }
             return null;
         }
        

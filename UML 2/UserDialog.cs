@@ -226,7 +226,7 @@ namespace UML_2
                         }
                         catch (Exception)
                         { 
-                            Console.WriteLine("Pizza was not found");
+                            Console.WriteLine("Pizza doesnt exist");
                         }
                         Console.WriteLine("Press any key to continue");
                         Console.ReadKey();
